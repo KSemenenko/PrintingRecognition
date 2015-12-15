@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuth", "UserAuth\UserAuth.csproj", "{293075A8-CF16-4770-941F-1D1E5C5621DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuth.Tests", "UserAuth.Tests\UserAuth.Tests.csproj", "{6209E7A2-CEC5-45A6-9BEE-95B8E91332F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{293075A8-CF16-4770-941F-1D1E5C5621DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293075A8-CF16-4770-941F-1D1E5C5621DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293075A8-CF16-4770-941F-1D1E5C5621DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293075A8-CF16-4770-941F-1D1E5C5621DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6209E7A2-CEC5-45A6-9BEE-95B8E91332F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6209E7A2-CEC5-45A6-9BEE-95B8E91332F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6209E7A2-CEC5-45A6-9BEE-95B8E91332F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6209E7A2-CEC5-45A6-9BEE-95B8E91332F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
