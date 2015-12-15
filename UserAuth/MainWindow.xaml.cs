@@ -20,22 +20,35 @@ namespace UserAuth
     /// </summary>
     public partial class MainWindow : Window
     {
+        Detector detector = new Detector();
+
+        List<Detector> list= new List<Detector>(); 
         public MainWindow()
         {
             InitializeComponent();
             PasswordTextBox.Focus();
+            
+            detector.Run();
         }
 
         private void GoButton_Click(object sender, RoutedEventArgs e)
         {
-            int a = 5;
+            detector.Stop();
+            list.Add(detector);
+            detector = new Detector();
+            PasswordTextBox.Text = String.Empty;
+            detector.Run();
         }
 
-        private void PasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void PasswordTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            int a = 5;
+            detector.NewLetter(e.Text);
         }
 
-       
+        private void PasswordTextBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                GoButton_Click(null, null);
+        }
     }
 }
