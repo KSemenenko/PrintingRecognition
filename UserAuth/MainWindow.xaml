@@ -25,6 +25,8 @@
             <Path Stretch="Fill" Fill="CornflowerBlue"
                   Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z " />
         </Button>
+        
+        <Button Click="Button_Click">asfasdf</Button>
 
     </Grid>
 </Window>

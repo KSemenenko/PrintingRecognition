@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UserAuth
 {
     public class Detector
     {
-        private Stopwatch globalStopwatch = new Stopwatch();
+        private readonly List<LetterItem> Chars = new List<LetterItem>();
+        private readonly Stopwatch globalStopwatch = new Stopwatch();
 
-        private List<LetterItem> Chars = new List<LetterItem>();
+        private readonly Stopwatch pressStopwatch = new Stopwatch();
 
         public TotalInfo Total = new TotalInfo();
 
-        public double CharPerMinute
-        {
-            get; set;
-        }
+        public double CharPerMinute { get; set; }
 
         public void Run()
         {
@@ -30,11 +25,11 @@ namespace UserAuth
             globalStopwatch.Stop();
             Total.TotalTime = globalStopwatch.ElapsedMilliseconds;
 
-            long prevtime = Chars[0].TimeMarker;
+            var prevtime = Chars[0].TimeMarker;
             Total.DifferentTime.Clear();
-            Total.DelatTime = prevtime;
+            Total.DelayTime = prevtime;
 
-            CharPerMinute = Math.Round(((double)Chars.Count / (double)(Total.TotalTime - Total.DelatTime)) * 1000d * 60d);
+            CharPerMinute = Math.Round(Chars.Count/(double) (Total.TotalTime - Total.DelayTime)*1000d*60d);
 
             foreach (var item in Chars)
             {
@@ -50,12 +45,25 @@ namespace UserAuth
 
         public void Add(string letter)
         {
+            if (pressStopwatch.IsRunning)
+            {
+                pressStopwatch.Stop();
+                Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds, pressStopwatch.ElapsedTicks));
+                pressStopwatch.Reset();
+                return;
+            }
+
             Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds));
+        }
+
+        public void PreAdd()
+        {
+            pressStopwatch.Start();
         }
 
         public List<bool> GetList()
         {
-            List<bool> list = new List<bool>();
+            var list = new List<bool>();
 
             long preview = 0;
             foreach (var item in Total.DifferentTime)
@@ -65,18 +73,15 @@ namespace UserAuth
             }
 
             return list;
-
-
         }
 
         public List<double> GetListFloat()
         {
-            List<double> list = new List<double>();
+            var list = new List<double>();
 
             long preview = 0;
             foreach (var item in Total.DifferentTime)
             {
-
                 if (item == 0 || preview == 0)
                 {
                     preview = item;
@@ -84,25 +89,21 @@ namespace UserAuth
                 }
 
 
-                list.Add((double)preview / (double)item);
+                list.Add(preview/(double) item);
 
 
                 preview = item;
-
             }
 
             return list;
-
-
         }
-
     }
 
     public class TotalInfo
     {
         public long TotalTime { get; set; }
 
-        public long DelatTime { get; set; }
+        public long DelayTime { get; set; }
 
         public List<long> DifferentTime { get; set; } = new List<long>();
 
@@ -111,18 +112,18 @@ namespace UserAuth
 
     public class LetterItem
     {
-        public string Letter { get; }
-        public long TimeMarker { get; }
-
-        public LetterItem(string letter, long timeMarker)
+        public LetterItem(string letter, long timeMarker, long pressTime = 0)
         {
             Letter = letter;
             TimeMarker = timeMarker;
+            PressItme = pressTime;
         }
+
+        public string Letter { get; }
+        public long TimeMarker { get; }
+
+        public long PressItme { get; }
     }
 
-    public class LetterTuple
-    {
-        private List<LetterItem> Chars = new List<LetterItem>();
-    }
+
 }
