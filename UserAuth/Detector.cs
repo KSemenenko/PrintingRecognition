@@ -15,6 +15,11 @@ namespace UserAuth
 
         public TotalInfo Total = new TotalInfo();
 
+        public double CharPerMinute
+        {
+            get; set;
+        }
+
         public void Run()
         {
             globalStopwatch.Start();
@@ -27,11 +32,14 @@ namespace UserAuth
 
             long prevtime = Chars[0].TimeMarker;
             Total.DifferentTime.Clear();
+            Total.DelatTime = prevtime;
+
+            CharPerMinute = Math.Round(((double)Chars.Count / (double)(Total.TotalTime - Total.DelatTime)) * 1000d * 60d);
 
             foreach (var item in Chars)
             {
                 Total.Word += item.Letter;
-                
+
                 Total.DifferentTime.Add(item.TimeMarker - prevtime);
                 prevtime = item.TimeMarker;
             }
@@ -40,7 +48,7 @@ namespace UserAuth
             globalStopwatch.Reset();
         }
 
-        public void NewLetter(string letter)
+        public void Add(string letter)
         {
             Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds));
         }
@@ -75,9 +83,9 @@ namespace UserAuth
                     continue;
                 }
 
-               
+
                 list.Add((double)preview / (double)item);
-               
+
 
                 preview = item;
 
@@ -87,12 +95,14 @@ namespace UserAuth
 
 
         }
-        
+
     }
 
     public class TotalInfo
     {
         public long TotalTime { get; set; }
+
+        public long DelatTime { get; set; }
 
         public List<long> DifferentTime { get; set; } = new List<long>();
 

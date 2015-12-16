@@ -25,6 +25,10 @@ namespace UserAuth
         List<Detector> list= new List<Detector>();
         List<List<bool>> listBool = new List<List<bool>>();
         List<List<double>> listfloat = new List<List<double>>();
+
+        List<double> listTisf = new List<double>();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +45,36 @@ namespace UserAuth
             listfloat.Add(detector.GetListFloat());
             detector = new Detector();
             PasswordTextBox.Text = String.Empty;
+
+
+            ///
+
+            var itemscount =  listBool.FirstOrDefault()?.Count ?? 0;
+
+            listTisf.Clear();
+            for (int depth = 0; depth < itemscount; depth++)
+            {
+                double val = 0;
+
+                for (int j = 0; j < listBool.Count; j++)
+                {
+
+                    if (listBool[j][depth])
+                        val += 1;
+                    else
+                        val -= 1;
+                }
+
+                listTisf.Add(val / listBool.Count);
+            }
+
             detector.Run();
             
         }
 
         private void PasswordTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            detector.NewLetter(e.Text);
+            detector.Add(e.Text);
         }
 
         private void PasswordTextBox_PreviewKeyUp(object sender, KeyEventArgs e)
