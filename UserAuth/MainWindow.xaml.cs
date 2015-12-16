@@ -74,13 +74,21 @@ namespace UserAuth
 
         private void PasswordTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
+            Console.WriteLine("PreviewTextInput");
             detector.Add(e.Text);
         }
 
         private void PasswordTextBox_PreviewKeyUp(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("PreviewKeyUp");
             if (e.Key == Key.Enter)
                 GoButton_Click(null, null);
+        }
+
+        private void PasswordTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("PreviewKeyDown");
+            int a = 5;
         }
     }
 }
