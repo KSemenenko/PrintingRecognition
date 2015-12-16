@@ -22,7 +22,9 @@ namespace UserAuth
     {
         Detector detector = new Detector();
 
-        List<Detector> list= new List<Detector>(); 
+        List<Detector> list= new List<Detector>();
+        List<List<bool>> listBool = new List<List<bool>>();
+        List<List<double>> listfloat = new List<List<double>>();
         public MainWindow()
         {
             InitializeComponent();
@@ -35,9 +37,12 @@ namespace UserAuth
         {
             detector.Stop();
             list.Add(detector);
+            listBool.Add(detector.GetList());
+            listfloat.Add(detector.GetListFloat());
             detector = new Detector();
             PasswordTextBox.Text = String.Empty;
             detector.Run();
+            
         }
 
         private void PasswordTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

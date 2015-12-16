@@ -25,9 +25,8 @@ namespace UserAuth
             globalStopwatch.Stop();
             Total.TotalTime = globalStopwatch.ElapsedMilliseconds;
 
-            long prevtime = 0;
+            long prevtime = Chars[0].TimeMarker;
             Total.DifferentTime.Clear();
-            
 
             foreach (var item in Chars)
             {
@@ -38,13 +37,57 @@ namespace UserAuth
             }
 
             Chars.Clear();
-
+            globalStopwatch.Reset();
         }
 
         public void NewLetter(string letter)
         {
             Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds));
         }
+
+        public List<bool> GetList()
+        {
+            List<bool> list = new List<bool>();
+
+            long preview = 0;
+            foreach (var item in Total.DifferentTime)
+            {
+                list.Add(item > preview);
+                preview = item;
+            }
+
+            return list;
+
+
+        }
+
+        public List<double> GetListFloat()
+        {
+            List<double> list = new List<double>();
+
+            long preview = 0;
+            foreach (var item in Total.DifferentTime)
+            {
+
+                if (item == 0 || preview == 0)
+                {
+                    preview = item;
+                    continue;
+                }
+
+               
+                list.Add((double)preview / (double)item);
+               
+
+                preview = item;
+
+            }
+
+            return list;
+
+
+        }
+        
     }
 
     public class TotalInfo
