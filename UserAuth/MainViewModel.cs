@@ -36,6 +36,7 @@ namespace UserAuth
 
             //закончили обучение, можно получать данные
             CurrentUser.Infos = control.GetLearnResult();
+            CurrentUser.AverageValue = Average(CurrentUser.Infos);
             CurrentUser.Password = CurrentUser.Infos.FirstOrDefault()?.Word ?? string.Empty;
 
             control.IsEnabled = false;
@@ -45,6 +46,47 @@ namespace UserAuth
             OnPropertyChanged(() => Users);
             Save();
         }
+
+        private TotalInfo Average(List<TotalInfo> items)
+        {
+            TotalInfo result = new TotalInfo();
+            result.DelayTime = Convert.ToInt64(items.Average(a => a.DelayTime));
+            result.CharPerMinute = items.Average(a => a.CharPerMinute);
+            result.TotalTime = Convert.ToInt64(items.Average(a => a.TotalTime));
+
+            List<List<long>> listItem;
+
+            listItem = items.Select(item => item.KeyPressTime).ToList();
+            result.KeyPressTime = AverageArray(listItem);
+
+            listItem = items.Select(item => item.DifferentTime).ToList();
+            result.DifferentTime = AverageArray(listItem);
+
+            listItem = items.Select(item => item.Time).ToList();
+            result.Time = AverageArray(listItem);
+
+            return result;
+        }
+
+
+        private List<long> AverageArray(List<List<long>> items)
+        {
+            var result = new List<long>();
+            var itemscount = items.FirstOrDefault()?.Count ?? 0;
+
+            for (var depth = 0; depth < itemscount; depth++)
+            {
+                var list = new List<long>();
+
+                for (var i = 0; i < items.Count; i++)
+                {
+                    list.Add(items[i][depth]);
+                }
+                result.Add(Convert.ToInt64(list.Average()));
+            }
+
+            return result;
+        } 
 
         public ObservableCollection<User> Users
         {
@@ -81,7 +123,7 @@ namespace UserAuth
                     Users.Add(user);
                     CurrentUser = user;
                 },
-                    (canExecutedParam) => { return true; });
+                (canExecutedParam) => true);
             }
         }
 
@@ -97,7 +139,7 @@ namespace UserAuth
                     ControlForLerning.Focus();
                     ControlForLerning.SetFocus();
                 },
-                    (canExecutedParam) => { return CurrentUser?.Infos?.Count == 0; });
+                (canExecutedParam) => CurrentUser?.Infos?.Count == 0);
             }
         }
 

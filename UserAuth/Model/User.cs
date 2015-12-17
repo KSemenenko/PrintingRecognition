@@ -9,6 +9,7 @@ namespace UserAuth.Model
     public class User
     {
         public List<TotalInfo> Infos { get; set; } = new List<TotalInfo>();
+        public TotalInfo AverageValue { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
     }
