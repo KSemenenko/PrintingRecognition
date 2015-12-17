@@ -12,8 +12,14 @@ namespace UserAuth.Model
 
         public long DelayTime { get; set; }
 
+        public List<long> Time { get; set; } = new List<long>();
+
         public List<long> DifferentTime { get; set; } = new List<long>();
 
+        public List<long> KeyPressTime { get; set; } = new List<long>();
+
         public string Word { get; set; } = string.Empty;
+
+        public double CharPerMinute { get; set; }
     }
 }

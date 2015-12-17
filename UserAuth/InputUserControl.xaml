@@ -1,20 +1,20 @@
 ﻿<UserControl x:Class="UserAuth.InputUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:UserAuth"
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="25" />
         </Grid.ColumnDefinitions>
         <TextBox BorderBrush="CornflowerBlue" Height="25" BorderThickness="0,0,0,1" Grid.Column="0"
-                 x:Name="PasswordTextBox" PreviewTextInput="PasswordTextBox_OnPreviewTextInput" PreviewKeyUp="PasswordTextBox_OnPreviewKeyUp" 
-                 PreviewKeyDown="PasswordTextBox_OnPreviewKeyDown"/>
-        <Button  HorizontalAlignment="Left" Width="25" Height="20" Background="{x:Null}" Grid.Column="1"
+                 x:Name="PasswordTextBox" PreviewTextInput="PasswordTextBox_OnPreviewTextInput"
+                 PreviewKeyUp="PasswordTextBox_OnPreviewKeyUp"
+                 PreviewKeyDown="PasswordTextBox_OnPreviewKeyDown" />
+        <Button HorizontalAlignment="Left" Width="25" Height="20" Background="{x:Null}" Grid.Column="1"
                 BorderBrush="{x:Null}" BorderThickness="0" x:Name="GoButton" Click="GoButton_Click">
             <Path Stretch="Fill" Fill="CornflowerBlue"
                   Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z " />

@@ -7,51 +7,53 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen">
 
-    <TabControl >
+    <TabControl>
 
         <TabItem Header="Настройка" Height="30">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="25" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
-                <ListBox Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Users}" DisplayMemberPath="Name" SelectedItem="{Binding CurrentUser}"/>
+                <ListBox Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Users}" DisplayMemberPath="Name"
+                         SelectedItem="{Binding CurrentUser}" />
 
                 <Grid Grid.Column="1" Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBox Grid.Row="0" VerticalAlignment="Center" Margin="5" Height="25" Text="{Binding CurrentUser.Name}"/>
-                    <Button Grid.Row="1" VerticalAlignment="Center" Margin="5" Height="25" Content="Создать пароль"/>
+                    <TextBox Grid.Row="0" VerticalAlignment="Center" Margin="5" Height="25"
+                             Text="{Binding CurrentUser.Name}" />
+                    <Button Grid.Row="1" VerticalAlignment="Center" Margin="5" Height="25" Content="Создать пароль"
+                            Command="{Binding CreatePasswordCommand}" />
 
-                    <local:InputUserControl Grid.Row="2"></local:InputUserControl>
+                    <Label Grid.Row="2" Content="{Binding CurrentUser.Password}" />
 
-
-
-
-
+                    <local:InputUserControl x:Name="LerningControl" Grid.Row="3" Margin="5" IsEnabled="False" />
 
 
                 </Grid>
 
-                <Button Content="Добавить пароль" Command="{Binding AddNewCommand}" Grid.Row="1" Grid.Column="0" Margin="2"/>
-                
+                <Button Content="Добавить пароль" Command="{Binding AddNewUserCommand}" Grid.Row="1" Grid.Column="0"
+                        Margin="2" />
 
             </Grid>
         </TabItem>
 
-        <TabItem Header="Проверка" >
+        <TabItem Header="Проверка">
             <Grid>
-                <local:InputUserControl VerticalAlignment="Center" Margin="10"></local:InputUserControl>
+                <local:InputUserControl x:Name="LoginControl" VerticalAlignment="Center" Margin="10" />
 
             </Grid>
         </TabItem>
@@ -60,5 +62,3 @@
 
 
 </Window>
-    
-    

@@ -9,12 +9,12 @@ namespace UserAuth
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainViewModel model = new MainViewModel();
-
+        private readonly MainViewModel model; 
 
         public MainWindow()
         {
             InitializeComponent();
+            model =new MainViewModel(LerningControl, LoginControl);
             this.DataContext = model;
         }
     }

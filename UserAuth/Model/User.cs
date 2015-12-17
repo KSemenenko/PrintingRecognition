@@ -10,5 +10,6 @@ namespace UserAuth.Model
     {
         public List<TotalInfo> Infos { get; set; } = new List<TotalInfo>();
         public string Name { get; set; }
+        public string Password { get; set; }
     }
 }

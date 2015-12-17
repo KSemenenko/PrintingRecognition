@@ -1,46 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UserAuth.Model;
 
 namespace UserAuth
 {
     public class Detector
     {
-        private readonly List<LetterItem> Chars = new List<LetterItem>();
+        private readonly List<LetterItem> chars = new List<LetterItem>();
         private readonly Stopwatch globalStopwatch = new Stopwatch();
-
         private readonly Stopwatch pressStopwatch = new Stopwatch();
-
         public TotalInfo Total = new TotalInfo();
 
-        public double CharPerMinute { get; set; }
-
-        public void Run()
+        public void Start()
         {
+            globalStopwatch.Reset();
+            pressStopwatch.Reset();
             globalStopwatch.Start();
+            chars.Clear();
+            Total = new TotalInfo();
         }
 
         public void Stop()
         {
             globalStopwatch.Stop();
+            pressStopwatch.Stop();
             Total.TotalTime = globalStopwatch.ElapsedMilliseconds;
 
-            var prevtime = Chars[0].TimeMarker;
-            Total.DifferentTime.Clear();
-            Total.DelayTime = prevtime;
-
-            CharPerMinute = Math.Round(Chars.Count/(double) (Total.TotalTime - Total.DelayTime)*1000d*60d);
-
-            foreach (var item in Chars)
+            if (chars.Count > 0)
             {
-                Total.Word += item.Letter;
+                if (chars.Last()?.Letter == "\r")
+                {
+                    chars.Remove(chars.Last());
+                }
 
-                Total.DifferentTime.Add(item.TimeMarker - prevtime);
-                prevtime = item.TimeMarker;
+                var prevtime = chars[0].TimeMarker;
+                Total.DelayTime = prevtime;
+                Total.CharPerMinute = Math.Round(chars.Count/(double) (Total.TotalTime - Total.DelayTime)*1000d*60d);
+                foreach (var item in chars)
+                {
+                    Total.Word += item.Letter;
+
+                    Total.DifferentTime.Add(item.TimeMarker - prevtime);
+                    Total.KeyPressTime.Add(item.PressItme);
+                    Total.Time.Add(item.TimeMarker);
+                    prevtime = item.TimeMarker;
+                }
             }
 
-            Chars.Clear();
+            chars.Clear();
             globalStopwatch.Reset();
         }
 
@@ -49,62 +58,17 @@ namespace UserAuth
             if (pressStopwatch.IsRunning)
             {
                 pressStopwatch.Stop();
-                Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds, pressStopwatch.ElapsedTicks));
+                chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds, pressStopwatch.ElapsedTicks));
                 pressStopwatch.Reset();
                 return;
             }
 
-            Chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds));
+            chars.Add(new LetterItem(letter, globalStopwatch.ElapsedMilliseconds));
         }
 
         public void PreAdd()
         {
             pressStopwatch.Start();
         }
-
-        public List<bool> GetList()
-        {
-            var list = new List<bool>();
-
-            long preview = 0;
-            foreach (var item in Total.DifferentTime)
-            {
-                list.Add(item > preview);
-                preview = item;
-            }
-
-            return list;
-        }
-
-        public List<double> GetListFloat()
-        {
-            var list = new List<double>();
-
-            long preview = 0;
-            foreach (var item in Total.DifferentTime)
-            {
-                if (item == 0 || preview == 0)
-                {
-                    preview = item;
-                    continue;
-                }
-
-
-                list.Add(preview/(double) item);
-
-
-                preview = item;
-            }
-
-            return list;
-        }
     }
-
-    
-
-   
-
-
-   
-
 }
