@@ -17,7 +17,6 @@ namespace UserAuth.Model
 
         public string Letter { get; }
         public long TimeMarker { get; }
-
         public long PressItme { get; }
     }
 }

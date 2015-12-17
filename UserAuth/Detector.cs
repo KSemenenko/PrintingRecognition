@@ -70,5 +70,10 @@ namespace UserAuth
         {
             pressStopwatch.Start();
         }
+
+        public bool IsEnter()
+        {
+            return chars.Count > 0;
+        }
     }
 }

@@ -13,13 +13,15 @@ namespace UserAuth
     /// </summary>
     public partial class InputUserControl : UserControl
     {
+        private readonly List<TotalInfo> totalInfoList = new List<TotalInfo>();
         private Detector detector = new Detector();
+
+        private bool isLogin;
 
         private int iterationCount = -1;
 
         public EventHandler<EventArgs> LearnComplete;
-
-        private readonly List<TotalInfo> totalInfoList = new List<TotalInfo>();
+        public EventHandler<EventArgs> LoginComplete;
 
 
         public InputUserControl()
@@ -29,13 +31,21 @@ namespace UserAuth
 
         public void StartLearn(int сount)
         {
+            isLogin = false;
             iterationCount = сount;
+            detector.Start();
+        }
+
+        public void StartLogin()
+        {
+            isLogin = true;
+            iterationCount = 1;
             detector.Start();
         }
 
         private void GoButton_Click(object sender, RoutedEventArgs e)
         {
-            if (iterationCount == -1)
+            if (iterationCount == -1 || !detector.IsEnter())
             {
                 return;
             }
@@ -49,7 +59,14 @@ namespace UserAuth
 
             if (iterationCount == 0)
             {
-                LearnComplete?.Invoke(this, new EventArgs());
+                if (isLogin)
+                {
+                    LoginComplete?.Invoke(this, new EventArgs());
+                }
+                else
+                {
+                    LearnComplete?.Invoke(this, new EventArgs());
+                }
                 return;
             }
 
@@ -92,26 +109,27 @@ namespace UserAuth
             return totalInfoList.ToList();
         }
 
+        //        }
+        //            val -= 1;
+        //        {
+        //        else
+        //        }
+        //            val += 1;
+        //        {
+        //        if (listBool[j][depth])
+        //    {
 
-        //PasswordTextBox.Text = string.Empty;
+        //    for (var j = 0; j < listBool.Count; j++)
+        //    double val = 0;
+        //{
+        //for (var depth = 0; depth < itemscount; depth++)
+
+        //listTisf.Clear();
 
         //var itemscount = listBool.FirstOrDefault()?.Count ?? 0;
 
-        //listTisf.Clear();
-        //for (var depth = 0; depth < itemscount; depth++)
-        //{
-        //    double val = 0;
 
-        //    for (var j = 0; j < listBool.Count; j++)
-        //    {
-        //        if (listBool[j][depth])
-        //        {
-        //            val += 1;
-        //        }
-        //        else
-        //        {
-        //            val -= 1;
-        //        }
+        //PasswordTextBox.Text = string.Empty;
         //    }
 
         //    listTisf.Add(val/listBool.Count);

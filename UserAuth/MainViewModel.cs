@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MVVMBase;
@@ -15,11 +13,12 @@ namespace UserAuth
 {
     public class MainViewModel : BaseViewModel
     {
-        private ObservableCollection<User> users = new ObservableCollection<User>();
-        private string fileName = "config.json";
+        private readonly InputUserControl ControlForLerning;
+        private readonly InputUserControl ControlForLogin;
 
-        private InputUserControl ControlForLerning;
-        private InputUserControl ControlForLogin;
+        private User currentUser;
+        private readonly string fileName = "config.json";
+        private ObservableCollection<User> users = new ObservableCollection<User>();
 
         public MainViewModel(InputUserControl controlForLerning, InputUserControl controlForLogin)
         {
@@ -28,11 +27,89 @@ namespace UserAuth
             ControlForLogin = controlForLogin;
 
             ControlForLerning.LearnComplete += LearnComplete;
+            ControlForLogin.LoginComplete += LoginComplete;
+        }
+
+        public ObservableCollection<User> Users
+        {
+            get { return users; }
+            set
+            {
+                users = value;
+                OnPropertyChanged(() => Users);
+            }
+        }
+
+        public User CurrentUser
+        {
+            get { return currentUser; }
+            set
+            {
+                currentUser = value;
+                Save();
+                OnPropertyChanged(() => CurrentUser);
+                OnPropertyChanged(() => CreatePasswordCommand);
+            }
+        }
+
+        public ICommand AddNewUserCommand
+        {
+            get
+            {
+                return new DelegateCommand(executedParam =>
+                {
+                    var user = new User();
+                    user.Name = "New User";
+                    Users.Add(user);
+                    CurrentUser = user;
+                },
+                    canExecutedParam => true);
+            }
+        }
+
+        public ICommand CreatePasswordCommand
+        {
+            get
+            {
+                return new DelegateCommand(executedParam =>
+                {
+                    MessageBox.Show("Привет! Введите ваш пароль в синее поле 10 раз подряд.\nПосле ввода каждого пароля нажмите Enter");
+                    ControlForLerning.IsEnabled = true;
+                    ControlForLerning.StartLearn(10);
+                    ControlForLerning.Focus();
+                    ControlForLerning.SetFocus();
+                },
+                    canExecutedParam => CurrentUser?.Infos?.Count == 0);
+            }
+        }
+
+        public ICommand LoginCommand
+        {
+            get
+            {
+                return new DelegateCommand(executedParam =>
+                {
+                    MessageBox.Show("Введите пароль!");
+                    ControlForLogin.IsEnabled = true;
+                    ControlForLogin.StartLogin();
+                    ControlForLogin.Focus();
+                    ControlForLogin.SetFocus();
+                },
+                    canExecutedParam => true);
+            }
+        }
+
+        private void LoginComplete(object sender, EventArgs eventArgs)
+        {
+            var control = (InputUserControl) sender;
+            var data = control.GetLearnResult();
+            control.IsEnabled = false;
+            control.CleanData();
         }
 
         private void LearnComplete(object sender, EventArgs eventArgs)
         {
-            InputUserControl control = (InputUserControl) sender;
+            var control = (InputUserControl) sender;
 
             //закончили обучение, можно получать данные
             CurrentUser.Infos = control.GetLearnResult();
@@ -49,7 +126,7 @@ namespace UserAuth
 
         private TotalInfo Average(List<TotalInfo> items)
         {
-            TotalInfo result = new TotalInfo();
+            var result = new TotalInfo();
             result.DelayTime = Convert.ToInt64(items.Average(a => a.DelayTime));
             result.CharPerMinute = items.Average(a => a.CharPerMinute);
             result.TotalTime = Convert.ToInt64(items.Average(a => a.TotalTime));
@@ -86,61 +163,6 @@ namespace UserAuth
             }
 
             return result;
-        } 
-
-        public ObservableCollection<User> Users
-        {
-            get { return users; }
-            set
-            {
-                users = value;
-                OnPropertyChanged(() => Users);
-            }
-        }
-
-        private User currentUser;
-
-        public User CurrentUser
-        {
-            get { return currentUser; }
-            set
-            {
-                currentUser = value;
-                Save();
-                OnPropertyChanged(() => CurrentUser);
-                OnPropertyChanged(() => CreatePasswordCommand);
-            }
-        }
-
-        public ICommand AddNewUserCommand
-        {
-            get
-            {
-                return new DelegateCommand((executedParam) =>
-                {
-                    User user = new User();
-                    user.Name = "New User";
-                    Users.Add(user);
-                    CurrentUser = user;
-                },
-                (canExecutedParam) => true);
-            }
-        }
-
-        public ICommand CreatePasswordCommand
-        {
-            get
-            {
-                return new DelegateCommand((executedParam) =>
-                {
-                    MessageBox.Show("Привет! Введите ваш пароль в синее поле 10 раз подряд.\nПосле ввода каждого пароля нажмите Enter");
-                    ControlForLerning.IsEnabled = true;
-                    ControlForLerning.StartLearn(10);
-                    ControlForLerning.Focus();
-                    ControlForLerning.SetFocus();
-                },
-                (canExecutedParam) => CurrentUser?.Infos?.Count == 0);
-            }
         }
 
 

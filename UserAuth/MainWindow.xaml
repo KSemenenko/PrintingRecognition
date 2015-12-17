@@ -53,12 +53,15 @@
 
         <TabItem Header="Проверка">
             <Grid>
-                <local:InputUserControl x:Name="LoginControl" VerticalAlignment="Center" Margin="10" />
+
+                <Button Content="Логин" Width="120" Height="30" VerticalAlignment="Top" Margin="0,50,0,0"
+                        Command="{Binding LoginCommand}" />
+
+                <local:InputUserControl x:Name="LoginControl" VerticalAlignment="Center" Margin="10" IsEnabled="False" />
 
             </Grid>
         </TabItem>
 
     </TabControl>
-
 
 </Window>
