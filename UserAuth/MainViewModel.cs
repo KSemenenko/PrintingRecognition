@@ -89,7 +89,7 @@ namespace UserAuth
             {
                 return new DelegateCommand(executedParam =>
                 {
-                    MessageBox.Show("Введите пароль!");
+                    MessageBox.Show("Приготовтесь введить пароль!");
                     ControlForLogin.IsEnabled = true;
                     ControlForLogin.StartLogin();
                     ControlForLogin.Focus();
@@ -105,13 +105,20 @@ namespace UserAuth
             var data = control.GetLearnResult();
             control.IsEnabled = false;
             control.CleanData();
+            var name = CheckLogin(data.FirstOrDefault());
+            MessageBox.Show("Ваше имя:" + name);
+        }
+
+        private string CheckLogin(TotalInfo info)
+        {
+            string name = string.Empty;
+            return name;
         }
 
         private void LearnComplete(object sender, EventArgs eventArgs)
         {
             var control = (InputUserControl) sender;
 
-            //закончили обучение, можно получать данные
             CurrentUser.Infos = control.GetLearnResult();
             CurrentUser.AverageValue = Average(CurrentUser.Infos);
             CurrentUser.Password = CurrentUser.Infos.FirstOrDefault()?.Word ?? string.Empty;
