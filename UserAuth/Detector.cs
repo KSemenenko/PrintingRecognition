@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UserAuth.Model;
 
 namespace UserAuth
 {
@@ -99,31 +100,11 @@ namespace UserAuth
         }
     }
 
-    public class TotalInfo
-    {
-        public long TotalTime { get; set; }
+    
 
-        public long DelayTime { get; set; }
+   
 
-        public List<long> DifferentTime { get; set; } = new List<long>();
 
-        public string Word { get; set; } = string.Empty;
-    }
-
-    public class LetterItem
-    {
-        public LetterItem(string letter, long timeMarker, long pressTime = 0)
-        {
-            Letter = letter;
-            TimeMarker = timeMarker;
-            PressItme = pressTime;
-        }
-
-        public string Letter { get; }
-        public long TimeMarker { get; }
-
-        public long PressItme { get; }
-    }
-
+   
 
 }
