@@ -15,9 +15,9 @@ namespace UserAuth
     {
         private readonly InputUserControl ControlForLerning;
         private readonly InputUserControl ControlForLogin;
+        private readonly string fileName = "config.json";
 
         private User currentUser;
-        private readonly string fileName = "config.json";
         private ObservableCollection<User> users = new ObservableCollection<User>();
 
         public MainViewModel(InputUserControl controlForLerning, InputUserControl controlForLogin)
@@ -101,7 +101,7 @@ namespace UserAuth
 
         private void LoginComplete(object sender, EventArgs eventArgs)
         {
-            var control = (InputUserControl) sender;
+            var control = (InputUserControl)sender;
             var data = control.GetLearnResult();
             control.IsEnabled = false;
             control.CleanData();
@@ -111,23 +111,24 @@ namespace UserAuth
 
         private string CheckLogin(TotalInfo info)
         {
-            List<Tuple<string,double>> userList = new List<Tuple<string, double>>();
+            var userList = new List<Tuple<string, double>>();
 
             foreach (var user in Users)
             {
-                foreach (var item in user.Infos.Where(w=>w.Word == info.Word))
+                foreach (var item in user.Infos.Where(w => w.Word == info.Word))
                 {
                     userList.Add(new Tuple<string, double>(user.Name, Distance(info.DifferentTime, item.DifferentTime)));
                 }
             }
 
-            var result = userList.FirstOrDefault(w => w.Item2 == userList.Min(m => m.Item2))?.Item1;
+            var min = userList.Min(m => m.Item2);
+            var result = userList.FirstOrDefault(w => w.Item2 == min)?.Item1;
             return result ?? "no user";
         }
 
         private void LearnComplete(object sender, EventArgs eventArgs)
         {
-            var control = (InputUserControl) sender;
+            var control = (InputUserControl)sender;
 
             CurrentUser.Infos = control.GetLearnResult();
             CurrentUser.AverageValue = Average(CurrentUser.Infos);
@@ -162,7 +163,6 @@ namespace UserAuth
             return result;
         }
 
-
         private List<long> AverageArray(List<List<long>> items)
         {
             var result = new List<long>();
@@ -185,19 +185,20 @@ namespace UserAuth
         private double Distance(List<long> first, List<long> second)
         {
             if (first.Count != second.Count)
+            {
                 return double.MaxValue;
+            }
 
             double acc = 0;
 
-            for (int i = 0; i < first.Count; i++)
+            for (var i = 0; i < first.Count; i++)
             {
                 var temp = Convert.ToDouble(second[i] - first[i]);
-                acc += (temp * temp);
+                acc += temp*temp;
             }
 
             return Math.Sqrt(acc);
         }
-
 
         private void Save()
         {

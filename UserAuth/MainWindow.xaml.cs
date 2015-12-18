@@ -1,21 +1,19 @@
-﻿using System;
-using System.Windows;
-
+﻿using System.Windows;
 
 namespace UserAuth
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainViewModel model; 
+        private readonly MainViewModel model;
 
         public MainWindow()
         {
             InitializeComponent();
-            model =new MainViewModel(LerningControl, LoginControl);
-            this.DataContext = model;
+            model = new MainViewModel(LerningControl, LoginControl);
+            DataContext = model;
         }
     }
 }

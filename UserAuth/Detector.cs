@@ -37,7 +37,7 @@ namespace UserAuth
             {
                 var prevtime = chars[0].TimeMarker;
                 Total.DelayTime = prevtime;
-                Total.CharPerMinute = Math.Round(chars.Count/(double) (Total.TotalTime - Total.DelayTime)*1000d*60d);
+                Total.CharPerMinute = Math.Round(chars.Count/(double)(Total.TotalTime - Total.DelayTime)*1000d*60d);
                 foreach (var item in chars)
                 {
                     Total.Word += item.Letter;
