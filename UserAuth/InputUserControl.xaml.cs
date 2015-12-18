@@ -23,6 +23,8 @@ namespace UserAuth
         public EventHandler<EventArgs> LearnComplete;
         public EventHandler<EventArgs> LoginComplete;
 
+        private string password = string.Empty;
+
 
         public InputUserControl()
         {
@@ -50,26 +52,39 @@ namespace UserAuth
                 return;
             }
 
-            detector.Stop();
-            totalInfoList.Add(detector.Total);
-            detector = new Detector();
-            iterationCount--;
+            var pass = detector.Stop();
 
             PasswordTextBox.Text = string.Empty;
 
-            if (iterationCount == 0)
+            if (!string.IsNullOrEmpty(pass))
             {
-                if (isLogin)
+                if (string.IsNullOrEmpty(password))
                 {
-                    LoginComplete?.Invoke(this, new EventArgs());
+                    password = pass;
                 }
-                else
+
+                if (password == pass)
                 {
-                    LearnComplete?.Invoke(this, new EventArgs());
+                    totalInfoList.Add(detector.Total);
+
+                    iterationCount--;
+
+                    if (iterationCount == 0)
+                    {
+                        if (isLogin)
+                        {
+                            LoginComplete?.Invoke(this, new EventArgs());
+                        }
+                        else
+                        {
+                            LearnComplete?.Invoke(this, new EventArgs());
+                        }
+                        return;
+                    }
                 }
-                return;
             }
 
+            detector = new Detector();
             detector.Start();
         }
 
@@ -102,6 +117,7 @@ namespace UserAuth
             iterationCount = -1;
             detector = new Detector();
             totalInfoList.Clear();
+            password = string.Empty;
         }
 
         public List<TotalInfo> GetLearnResult()

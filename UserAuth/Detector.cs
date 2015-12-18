@@ -22,19 +22,19 @@ namespace UserAuth
             Total = new TotalInfo();
         }
 
-        public void Stop()
+        public string Stop()
         {
             globalStopwatch.Stop();
             pressStopwatch.Stop();
             Total.TotalTime = globalStopwatch.ElapsedMilliseconds;
 
+            if (chars.LastOrDefault()?.Letter == "\r")
+            {
+                chars.Remove(chars.Last());
+            }
+
             if (chars.Count > 0)
             {
-                if (chars.Last()?.Letter == "\r")
-                {
-                    chars.Remove(chars.Last());
-                }
-
                 var prevtime = chars[0].TimeMarker;
                 Total.DelayTime = prevtime;
                 Total.CharPerMinute = Math.Round(chars.Count/(double) (Total.TotalTime - Total.DelayTime)*1000d*60d);
@@ -48,9 +48,15 @@ namespace UserAuth
                     prevtime = item.TimeMarker;
                 }
             }
+            else
+            {
+                Total.Word = string.Empty;
+            }
 
             chars.Clear();
             globalStopwatch.Reset();
+
+            return Total.Word;
         }
 
         public void Add(string letter)

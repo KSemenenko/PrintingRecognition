@@ -115,13 +115,14 @@ namespace UserAuth
 
             foreach (var user in Users)
             {
-                foreach (var item in user.Infos)
+                foreach (var item in user.Infos.Where(w=>w.Word == info.Word))
                 {
                     userList.Add(new Tuple<string, double>(user.Name, Distance(info.DifferentTime, item.DifferentTime)));
                 }
             }
 
-            return userList.FirstOrDefault(w=> w.Item2 == userList.Min(m=>m.Item2)).Item1;
+            var result = userList.FirstOrDefault(w => w.Item2 == userList.Min(m => m.Item2))?.Item1;
+            return result ?? "no user";
         }
 
         private void LearnComplete(object sender, EventArgs eventArgs)
