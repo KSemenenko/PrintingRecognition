@@ -73,9 +73,9 @@ namespace UserAuth
             {
                 return new DelegateCommand(executedParam =>
                 {
-                    MessageBox.Show("Привет! Введите ваш пароль в синее поле 10 раз подряд.\nПосле ввода каждого пароля нажмите Enter");
+                    MessageBox.Show("Привет! Введите ваш пароль в синее поле 3 раз подряд.\nПосле ввода каждого пароля нажмите Enter");
                     ControlForLerning.IsEnabled = true;
-                    ControlForLerning.StartLearn(10);
+                    ControlForLerning.StartLearn(3);
                     ControlForLerning.Focus();
                     ControlForLerning.SetFocus();
                 },
@@ -111,8 +111,17 @@ namespace UserAuth
 
         private string CheckLogin(TotalInfo info)
         {
-            string name = string.Empty;
-            return name;
+            List<Tuple<string,double>> userList = new List<Tuple<string, double>>();
+
+            foreach (var user in Users)
+            {
+                foreach (var item in user.Infos)
+                {
+                    userList.Add(new Tuple<string, double>(user.Name, Distance(info.DifferentTime, item.DifferentTime)));
+                }
+            }
+
+            return userList.FirstOrDefault(w=> w.Item2 == userList.Min(m=>m.Item2)).Item1;
         }
 
         private void LearnComplete(object sender, EventArgs eventArgs)
@@ -172,12 +181,28 @@ namespace UserAuth
             return result;
         }
 
+        private double Distance(List<long> first, List<long> second)
+        {
+            if (first.Count != second.Count)
+                return double.MaxValue;
+
+            double acc = 0;
+
+            for (int i = 0; i < first.Count; i++)
+            {
+                var temp = Convert.ToDouble(second[i] - first[i]);
+                acc += (temp * temp);
+            }
+
+            return Math.Sqrt(acc);
+        }
+
 
         private void Save()
         {
             try
             {
-                var json = JsonConvert.SerializeObject(users);
+                var json = JsonConvert.SerializeObject(Users);
                 File.WriteAllText(fileName, json);
             }
             catch (Exception)
